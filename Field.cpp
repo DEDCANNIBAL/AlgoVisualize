@@ -11,8 +11,8 @@ Field::Field(sf::Vector2u size) :
         size(size),
         obstacles(size.x, std::vector<bool>(size.y, Cell::Empty)),
         visited(size.x, std::vector<bool>(size.y, Cell::Empty)),
-        start(0, 0),
-        finish(size - sf::Vector2u(1, 1)) {}
+        start(0, size.y / 2),
+        finish(sf::Vector2u(size.x - 1, size.y / 2)) {}
 
 void Field::set_cell(sf::Vector2u pos, bool cell) {
     if (pos < size)
@@ -35,7 +35,8 @@ void Field::clear_obstacles() {
 
 void Field::randomize() {
     std::default_random_engine gen(time(0));
-    for (int i = 0; i < size.x * size.y / 4; i++) {
+    const static float wall_percent = 0.45;
+    for (int i = 0; i < size.x * size.y * wall_percent; i++) {
         uint x = gen() % size.x;
         uint y = gen() % size.y;
         sf::Vector2u pos(x, y);

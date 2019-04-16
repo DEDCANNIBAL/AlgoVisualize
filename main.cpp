@@ -1,5 +1,4 @@
-#include "imgui.h"
-#include "imgui-SFML.h"
+#include <thread>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -8,16 +7,22 @@
 
 #include "FieldDrawer.h"
 #include "PathFinder.h"
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 
 int main() {
-    sf::Vector2u size(20, 20);
+    sf::Vector2u size(50, 35);
     Field field(size);
     FieldDrawer field_drawer(field);
-    PathFinder path_finder(field);
     field.randomize();
-    path_finder.bfs();
 
-    sf::RenderWindow window(sf::VideoMode(640, 480), "AlgoVisualize");
+    PathFinder path_finder(field);
+    path_finder.set_delay(0.03);
+    std::thread path_finding_thread(&PathFinder::bfs, &path_finder);
+    path_finding_thread.detach();
+
+    sf::RenderWindow window(sf::VideoMode(1000, 700), "AlgoVisualize");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
 
@@ -34,7 +39,8 @@ int main() {
 
         ImGui::SFML::Update(window, deltaClock.restart());
         field_drawer.update();
-        field_drawer.update(path_finder.get_path());
+        if (path_finder.is_finished())
+            field_drawer.update(path_finder.get_path());
 
         window.clear(sf::Color::White);
         window.draw(field_drawer);

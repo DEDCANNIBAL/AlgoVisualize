@@ -1,13 +1,17 @@
 #include "PathFinder.h"
 
 #include <algorithm>
+#include <thread>
+#include <chrono>
 
 
 PathFinder::PathFinder(Field &field) :
         field(field),
         finished(true),
         is_going(false),
-        size(field.get_size()) {}
+        size(field.get_size()) {
+    set_delay(0);
+}
 
 void PathFinder::prepare() {
     start = field.get_start();
@@ -58,6 +62,8 @@ void PathFinder::bfs() {
             break;
         }
         process_adj_cells(current_cell);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
     finished = true;
     is_going = false;

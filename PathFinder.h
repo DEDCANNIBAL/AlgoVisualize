@@ -16,6 +16,7 @@ class PathFinder {
     sf::Vector2u size, start, finish;
     std::queue<sf::Vector2u> queue;
     std::vector<std::vector<uint>> dist;
+    long delay;
     const std::vector<sf::Vector2u> shifts = {{0, 1},
                                              {0, UINT_MAX},
                                              {1, 0},
@@ -31,6 +32,8 @@ public:
     explicit PathFinder(Field &field);
 
     void bfs();
+
+    void set_delay(float seconds) {delay = seconds * 1000;};
 
     bool is_finished() const { return finished; }
 

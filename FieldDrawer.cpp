@@ -15,7 +15,7 @@ void FieldDrawer::update() {
 }
 
 void FieldDrawer::update(const std::vector<sf::Vector2u> &path) {
-    for (int i = 1; i < path.size() - 1; i++)
+    for (int i = 1; i + 1 < path.size(); i++)
         set_color(path[i], sf::Color::Cyan);
 }
 
@@ -39,12 +39,19 @@ FieldDrawer::FieldDrawer(Field &field, float cell_size) :
     initialize_quads();
 }
 
+void FieldDrawer::initialize_boards() {
+    for (uint i = 0; i < (size.x + size.y + 2) * 2; i += 2)
+        initialize_board_pos(i, i > size.y * 2);
+    for (uint i = 0; i < boards.getVertexCount(); i++)
+        boards[i].color = sf::Color::Black;
+}
+
 void FieldDrawer::initialize_board_pos(uint i, bool is_horizontal) {
     boards[i].position = (is_horizontal ?
-                          sf::Vector2f(i / 2 - size.x - 1, 0) :
+                          sf::Vector2f(i / 2 - size.y - 1, 0) :
                           sf::Vector2f(0, i / 2)) * cell_size;
     boards[i + 1].position = (is_horizontal ?
-                              sf::Vector2f(i / 2 - size.x - 1, size.y) :
+                              sf::Vector2f(i / 2 - size.y - 1, size.y) :
                               sf::Vector2f(size.x, i / 2)) * cell_size;
 }
 
@@ -54,13 +61,6 @@ void FieldDrawer::initialize_quads() {
             set_position({i, j});
             set_color({i, j}, sf::Color::White);
         }
-}
-
-void FieldDrawer::initialize_boards() {
-    for (uint i = 0; i < (size.x + size.y + 2) * 2; i += 2)
-        initialize_board_pos(i, i > size.x * 2);
-    for (uint i = 0; i < boards.getVertexCount(); i++)
-        boards[i].color = sf::Color::Black;
 }
 
 void FieldDrawer::set_position(sf::Vector2u pos) {
@@ -75,6 +75,7 @@ void FieldDrawer::set_position(sf::Vector2u pos) {
 
 void FieldDrawer::set_color(sf::Vector2u pos, sf::Color col) {
     auto &row = quads[pos.x];
+    col.a = 150;
     for (int i = 0; i < 4; i++)
         row[pos.y * 4 + i].color = col;
 }
