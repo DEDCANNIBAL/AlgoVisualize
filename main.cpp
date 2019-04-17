@@ -9,6 +9,7 @@
 #include "PathFinder.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
+#include "FieldInterface.h"
 
 
 int main() {
@@ -19,12 +20,12 @@ int main() {
 
     PathFinder path_finder(field);
     path_finder.set_delay(0.03);
-    std::thread path_finding_thread(&PathFinder::bfs, &path_finder);
-    path_finding_thread.detach();
+    auto current_algorithm = &PathFinder::bfs;
 
     sf::RenderWindow window(sf::VideoMode(1000, 700), "AlgoVisualize");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
+    FieldInterface field_interface(field, window);
 
     sf::Clock deltaClock;
     while (window.isOpen()) {
@@ -38,6 +39,23 @@ int main() {
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
+
+        ImGui::Begin("Algorithms");
+
+        if (ImGui::RadioButton("BFS", true)) current_algorithm = &PathFinder::bfs;
+
+        if (ImGui::Button("Start")){
+            path_finder.stop();
+            std::thread path_finding_thread(&PathFinder::bfs, &path_finder);
+            path_finding_thread.detach();
+        };
+
+        if (ImGui::Button("Stop")){
+            path_finder.stop();
+        };
+
+        ImGui::End();
+
         field_drawer.update();
         if (path_finder.is_finished())
             field_drawer.update(path_finder.get_path());

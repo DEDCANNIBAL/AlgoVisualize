@@ -39,6 +39,8 @@ public:
 
     bool is_visited(sf::Vector2u pos) const { return visited[pos.x][pos.y]; }
 
+    void reset_visited();
+
     void clear_obstacles();
 
     void randomize();

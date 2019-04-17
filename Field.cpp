@@ -25,6 +25,10 @@ bool Field::visit_cell(sf::Vector2u pos) {
     return get_cell(pos);
 }
 
+void Field::reset_visited() {
+    visited.assign(size.x, std::vector<bool>(size.y, Cell::Empty));
+}
+
 bool Field::get_cell(sf::Vector2u pos) const {
     return !(pos < size) || obstacles[pos.x][pos.y];
 }
