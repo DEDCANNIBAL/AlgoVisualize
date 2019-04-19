@@ -26,7 +26,9 @@ class PathFinder {
 
     void restore_path();
 
-    void process_adj_cells(sf::Vector2u cell);
+    int bfs_iterate_once(int iteration_size);
+
+    int process_adj_cells(sf::Vector2u cell);
 
 public:
     explicit PathFinder(Field &field);

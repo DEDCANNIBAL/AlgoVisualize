@@ -19,7 +19,7 @@ int main() {
     field.randomize();
 
     PathFinder path_finder(field);
-    path_finder.set_delay(0.03);
+    path_finder.set_delay(0.1);
     auto current_algorithm = &PathFinder::bfs;
 
     sf::RenderWindow window(sf::VideoMode(1000, 700), "AlgoVisualize");
