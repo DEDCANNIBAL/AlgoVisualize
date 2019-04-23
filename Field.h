@@ -18,6 +18,10 @@ class Field {
     sf::Vector2u size;
     std::vector<std::vector<bool>> obstacles, visited;
     sf::Vector2u start, finish;
+    std::vector<sf::Vector2u> changed_cells;
+    void change_cell(sf::Vector2u);
+    void change_all_cells();
+
 public:
     explicit Field(sf::Vector2u size);
 
@@ -44,6 +48,8 @@ public:
     void clear_obstacles();
 
     void randomize();
+
+    std::vector<sf::Vector2u> observe_changed_cells();
 };
 
 

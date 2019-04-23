@@ -5,13 +5,13 @@ void FieldDrawer::draw(sf::RenderTarget &target, sf::RenderStates states) const 
     states.transform *= getTransform();
     for (auto &row:quads)
         target.draw(row, states);
-    target.draw(boards);
+    if (cell_size > 5)
+        target.draw(boards);
 }
 
 void FieldDrawer::update() {
-    for (uint i = 0; i < size.x; i++)
-        for (uint j = 0; j < size.y; j++)
-            set_color({i, j}, find_out_color({i, j}));
+    for (auto cell: field.observe_changed_cells())
+        set_color(cell, find_out_color(cell));
 }
 
 void FieldDrawer::update(const std::vector<sf::Vector2u> &path) {
