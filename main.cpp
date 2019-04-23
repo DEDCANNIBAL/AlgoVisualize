@@ -6,21 +6,25 @@
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include "FieldDrawer.h"
-#include "PathFinder.h"
+#include "BreadthFirstSearch.h"
+#include "PathFinderManager.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "FieldInterface.h"
 
 
 int main() {
-    sf::Vector2u size(50, 35);
+    sf::Vector2u size(100, 70);
     Field field(size);
-    FieldDrawer field_drawer(field);
+    FieldDrawer field_drawer(field, 10);
     field.randomize();
 
-    PathFinder path_finder(field);
-    path_finder.set_delay(0.1);
-    auto current_algorithm = &PathFinder::bfs;
+    BreadthFirstSearch path_finder(field);
+    PathFinderManager path_finder_manager;
+
+    path_finder_manager.set_algorithm(dynamic_cast<PathFinder*>(&path_finder));
+
+    path_finder_manager.set_delay(0.001);
 
     sf::RenderWindow window(sf::VideoMode(1000, 700), "AlgoVisualize");
     window.setFramerateLimit(60);
@@ -42,16 +46,19 @@ int main() {
 
         ImGui::Begin("Algorithms");
 
-        if (ImGui::RadioButton("BFS", true)) current_algorithm = &PathFinder::bfs;
+        if (ImGui::RadioButton("BFS", true))
+            path_finder_manager.set_algorithm(dynamic_cast<PathFinder*>(&path_finder));
 
         if (ImGui::Button("Start")){
-            path_finder.stop();
-            std::thread path_finding_thread(&PathFinder::bfs, &path_finder);
-            path_finding_thread.detach();
+            path_finder_manager.start_in_thread();
+        };
+
+        if (ImGui::Button("Continue")){
+            path_finder_manager.proceed_in_thread();
         };
 
         if (ImGui::Button("Stop")){
-            path_finder.stop();
+            path_finder_manager.stop();
         };
 
         ImGui::End();

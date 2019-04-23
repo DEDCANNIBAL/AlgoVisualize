@@ -9,39 +9,34 @@
 #include "Field.h"
 
 
+class StopIterationError : public std::exception {
+};
+
+
 class PathFinder {
+protected:
     Field &field;
     std::vector<sf::Vector2u> path;
-    bool finished, is_going;
-    sf::Vector2u size, start, finish;
-    std::queue<sf::Vector2u> queue;
     std::vector<std::vector<uint>> dist;
-    long delay;
-    const std::vector<sf::Vector2u> shifts = {{0, 1},
-                                             {0, UINT_MAX},
-                                             {1, 0},
-                                             {UINT_MAX, 0}};
-
-    void prepare();
-
-    void restore_path();
-
-    int bfs_iterate_once(int iteration_size);
-
-    int process_adj_cells(sf::Vector2u cell);
+    sf::Vector2u size, start, finish;
+    bool finished;
+    const std::vector<sf::Vector2u> shifts = {{0,        1},
+                                              {0, UINT_MAX},
+                                              {1,        0},
+                                              {UINT_MAX, 0}};
 
 public:
     explicit PathFinder(Field &field);
 
-    void bfs();
+    const std::vector<sf::Vector2u> &get_path() const { return path; }
 
-    void set_delay(float seconds) {delay = seconds * 1000;};
+    virtual void prepare();
 
     bool is_finished() const { return finished; }
 
-    void stop() { is_going = false; }
+    virtual void next() = 0;
 
-    const std::vector<sf::Vector2u> &get_path() const { return path; }
+    virtual void restore_path();
 
 };
 
