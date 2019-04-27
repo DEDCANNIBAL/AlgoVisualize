@@ -38,6 +38,7 @@ int main() {
             ImGui::SFML::ProcessEvent(event);
 
             if (event.type == sf::Event::Closed) {
+                path_finder_manager.stop();
                 window.close();
             }
         }

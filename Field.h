@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <SFML/System/Vector2.hpp>
+#include "SafeVector.h"
 
 
 bool operator<(const sf::Vector2u &a, const sf::Vector2u &b);
@@ -10,15 +11,18 @@ bool operator<(const sf::Vector2u &a, const sf::Vector2u &b);
 namespace Cell {
     enum {
         Empty = 0,
-        Wall
+        Wall,
+        Start,
+        Finish,
     };
 }
 
 class Field {
     sf::Vector2u size;
-    std::vector<std::vector<bool>> obstacles, visited;
+    std::vector<std::vector<u_int8_t>> obstacles;
+    std::vector<std::vector<bool>> visited;
     sf::Vector2u start, finish;
-    std::vector<sf::Vector2u> changed_cells;
+    SafeCellsVector changed_cells;
     void change_cell(sf::Vector2u);
     void change_all_cells();
 
@@ -27,11 +31,11 @@ public:
 
     sf::Vector2u get_size() const { return size; }
 
-    void set_cell(sf::Vector2u pos, bool cell);
+    void set_cell(sf::Vector2u pos, u_int8_t cell);
 
-    bool get_cell(sf::Vector2u pos) const;
+    u_int8_t get_cell(sf::Vector2u pos) const;
 
-    bool visit_cell(sf::Vector2u pos);
+    u_int8_t visit_cell(sf::Vector2u pos);
 
     void set_start(sf::Vector2u start);
 
