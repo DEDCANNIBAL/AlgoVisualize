@@ -15,15 +15,6 @@ Field::Field(sf::Vector2u size) :
     set_finish({size.x - 1, size.y / 2});
 }
 
-void Field::set_cell(sf::Vector2u pos, u_int8_t cell) {
-    if (pos < size and
-        pos != start and
-        pos != finish) {
-        obstacles[pos.x][pos.y] = cell;
-        change_cell(pos);
-    }
-}
-
 u_int8_t Field::visit_cell(sf::Vector2u pos) {
     if (pos < size) {
         visited[pos.x][pos.y] = true;
@@ -47,26 +38,37 @@ void Field::clear_obstacles() {
 }
 
 void Field::randomize() {
-    std::default_random_engine gen(time(0));
     const static float wall_percent = 0.45;
+    static std::random_device rd;
+    static std::default_random_engine gen(rd());
+    static std::uniform_int_distribution<> distribution_x(0, size.x - 1);
+    static std::uniform_int_distribution<> distribution_y(0, size.y - 1);
     for (int i = 0; i < size.x * size.y * wall_percent; i++) {
-        uint x = gen() % size.x;
-        uint y = gen() % size.y;
+        auto x = gen() % size.x;
+        auto y = gen() % size.y;
         sf::Vector2u pos(x, y);
-        set_cell(pos, Cell::Wall);
+        if (pos != start && pos != finish)
+            set_cell(pos, Cell::Wall);
     }
 }
 
 void Field::set_start(sf::Vector2u start) {
     set_cell(this->start, Cell::Empty);
-    set_cell(start, Cell::Start);
     this->start = start;
+    set_cell(start, Cell::Start);
 }
 
 void Field::set_finish(sf::Vector2u finish) {
     set_cell(this->finish, Cell::Empty);
-    set_cell(finish, Cell::Finish);
     this->finish = finish;
+    set_cell(finish, Cell::Finish);
+}
+
+void Field::set_cell(sf::Vector2u pos, u_int8_t cell) {
+    if (pos < size) {
+        obstacles[pos.x][pos.y] = cell;
+        change_cell(pos);
+    }
 }
 
 std::vector<sf::Vector2u> Field::observe_changed_cells() {

@@ -3,8 +3,8 @@ project(AlgoVisualize)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(lib/sfml/include)
-link_directories(lib/sfml/lib)
+include_directories(lib/SFML/include)
+link_directories(lib/SFML/lib)
 
 include_directories(lib/imgui)
 include_directories(lib/imgui-sfml)

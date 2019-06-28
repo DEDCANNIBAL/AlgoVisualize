@@ -8,14 +8,14 @@
 
 bool operator<(const sf::Vector2u &a, const sf::Vector2u &b);
 
-namespace Cell {
+struct Cell {
     enum {
         Empty = 0,
         Wall,
         Start,
         Finish,
     };
-}
+};
 
 class Field {
     sf::Vector2u size;

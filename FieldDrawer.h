@@ -31,6 +31,9 @@ public:
     void update();
 
     void update(const std::vector<sf::Vector2u> &path);
+
+    sf::Vector2u mouse_to_cell(sf::Vector2i);
+
 };
 
 

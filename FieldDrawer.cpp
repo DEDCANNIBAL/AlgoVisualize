@@ -79,3 +79,14 @@ void FieldDrawer::set_color(sf::Vector2u pos, sf::Color col) {
     for (int i = 0; i < 4; i++)
         row[pos.y * 4 + i].color = col;
 }
+
+sf::Vector2u FieldDrawer::mouse_to_cell(sf::Vector2i mouse_pos) {
+    mouse_pos.x = std::max(mouse_pos.x, 0);
+    mouse_pos.y = std::max(mouse_pos.y, 0);
+
+    auto cell_pos = static_cast<sf::Vector2u>(mouse_pos / static_cast<int>(cell_size));
+    cell_pos.x = std::min(cell_pos.x, size.x-1);
+    cell_pos.y = std::min(cell_pos.y, size.y-1);
+
+    return cell_pos;
+}
