@@ -39,3 +39,7 @@ void PathFinderManager::proceed() {
 void PathFinderManager::set_delay(float delay) {
     this->delay = static_cast<int> (delay * 1e3);
 }
+
+bool PathFinderManager::is_working() {
+    return not path_finder->is_finished();
+}

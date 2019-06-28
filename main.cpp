@@ -69,7 +69,8 @@ int main() {
 
         auto mouse_pos = sf::Mouse::getPosition(window);
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
-        field_interface.update(cell_pos);
+        if (not path_finder_manager.is_working())
+           field_interface.update(cell_pos);
 
         window.clear(sf::Color::White);
         window.draw(field_drawer);

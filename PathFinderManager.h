@@ -23,6 +23,7 @@ public:
 
     void set_delay(float delay);
 
+    bool is_working();
 };
 
 
