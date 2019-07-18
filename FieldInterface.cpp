@@ -64,7 +64,7 @@ void FieldInterface::update(sf::Vector2u cell_pos) {
 
 
 uint FieldInterface::get_transition(sf::Vector2u cell_pos) {
-    if (not sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+    if (not sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
         return Transition::NotPressed;
     }
     auto cell = field.get_cell(cell_pos);

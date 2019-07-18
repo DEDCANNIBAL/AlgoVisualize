@@ -11,6 +11,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "FieldInterface.h"
+#include "Camera.h"
 
 
 int main() {
@@ -22,10 +23,11 @@ int main() {
     BreadthFirstSearch path_finder(field);
     PathFinderManager path_finder_manager;
 
-    path_finder_manager.set_algorithm(dynamic_cast<PathFinder*>(&path_finder));
+    path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
     path_finder_manager.set_delay(0.001);
 
     sf::RenderWindow window(sf::VideoMode(1000, 1000), "AlgoVisualize");
+    Camera camera(sf::FloatRect(0, 0, 1000, 1000), window);
     //window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
     FieldInterface field_interface(field);
@@ -40,6 +42,7 @@ int main() {
                 path_finder_manager.stop();
                 window.close();
             }
+            camera.updateEvent(event);
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
@@ -47,17 +50,17 @@ int main() {
         ImGui::Begin("Algorithms");
 
         if (ImGui::RadioButton("BFS", true))
-            path_finder_manager.set_algorithm(dynamic_cast<PathFinder*>(&path_finder));
+            path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
 
-        if (ImGui::Button("Start")){
+        if (ImGui::Button("Start")) {
             path_finder_manager.start_in_thread();
         };
 
-        if (ImGui::Button("Continue")){
+        if (ImGui::Button("Continue")) {
             path_finder_manager.proceed_in_thread();
         };
 
-        if (ImGui::Button("Stop")){
+        if (ImGui::Button("Stop")) {
             path_finder_manager.stop();
         };
 
@@ -67,11 +70,14 @@ int main() {
         if (path_finder.is_finished())
             field_drawer.update(path_finder.get_path());
 
-        auto mouse_pos = sf::Mouse::getPosition(window);
+        auto pixel_pos = sf::Mouse::getPosition(window);
+        auto world_pos = window.mapPixelToCoords(pixel_pos);
+        auto mouse_pos = sf::Vector2i(static_cast<int> (world_pos.x), static_cast<int> (world_pos.y));
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
         if (not path_finder_manager.is_working())
-           field_interface.update(cell_pos);
+            field_interface.update(cell_pos);
 
+        camera.setView();
         window.clear(sf::Color::White);
         window.draw(field_drawer);
         ImGui::SFML::Render(window);
