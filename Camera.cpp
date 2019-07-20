@@ -29,7 +29,7 @@ void Camera::updateEvent(const sf::Event &event) {
     if (event.type == sf::Event::MouseMoved) {
         auto mouse_pos = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
         auto delta_mouse_pos = mouse_pos - prev_mouse_pos;
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             view.move(-delta_mouse_pos * zoom);
         prev_mouse_pos = mouse_pos;
     }

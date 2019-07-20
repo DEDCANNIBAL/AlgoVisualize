@@ -3,10 +3,11 @@
 
 void FieldDrawer::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
+    auto zoom = target.getSize().x / target.getView().getSize().x;
     for (auto &row:quads)
         target.draw(row, states);
-    if (cell_size > 5)
-        target.draw(boards);
+    if (cell_size * zoom > 5)
+        target.draw(boards, states);
 }
 
 void FieldDrawer::update() {

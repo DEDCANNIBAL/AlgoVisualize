@@ -31,13 +31,13 @@ void PathFinderManager::start_in_thread() {
 void PathFinderManager::proceed() {
     while (is_going and not path_finder->is_finished()) {
         path_finder->next();
-        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+        std::this_thread::sleep_for(std::chrono::microseconds(delay));
     }
     stop();
 }
 
 void PathFinderManager::set_delay(float delay) {
-    this->delay = static_cast<int> (delay * 1e3);
+    this->delay = static_cast<int> (delay * 1e6);
 }
 
 bool PathFinderManager::is_working() {

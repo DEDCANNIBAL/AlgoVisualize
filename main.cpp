@@ -15,24 +15,28 @@
 
 
 int main() {
-    sf::Vector2u size(50, 50);
+    sf::Vector2u size(500, 500);
     Field field(size);
-    FieldDrawer field_drawer(field, 20);
+    auto cell_size = 20;
+    FieldDrawer field_drawer(field, cell_size);
     field.randomize();
 
     BreadthFirstSearch path_finder(field);
     PathFinderManager path_finder_manager;
-
     path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
-    path_finder_manager.set_delay(0.001);
+    path_finder_manager.set_delay(0.0001);
 
-    sf::RenderWindow window(sf::VideoMode(1000, 1000), "AlgoVisualize");
-    Camera camera(sf::FloatRect(0, 0, 1000, 1000), window);
-    //window.setFramerateLimit(60);
+    sf::Vector2f window_size(1000, 1000);
+    auto window_width_in_cells = window_size.x / cell_size - 1;
+    field.set_start(size / 2u - sf::Vector2u(window_width_in_cells / 2, 0));
+    field.set_finish(size / 2u + sf::Vector2u(window_width_in_cells / 2, 0));
+    auto field_size = static_cast<float>(cell_size) * static_cast<sf::Vector2f>(size);
+    sf::RenderWindow window(sf::VideoMode(window_size.x, window_size.y), "AlgoVisualize");
+    Camera camera(sf::FloatRect((field_size - window_size) / 2.f, window_size), window);
     ImGui::SFML::Init(window);
     FieldInterface field_interface(field);
 
-    sf::Clock deltaClock;
+    sf::Clock delta_clock;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -45,7 +49,7 @@ int main() {
             camera.updateEvent(event);
         }
 
-        ImGui::SFML::Update(window, deltaClock.restart());
+        ImGui::SFML::Update(window, delta_clock.restart());
 
         ImGui::Begin("Algorithms");
 
