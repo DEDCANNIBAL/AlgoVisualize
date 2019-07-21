@@ -17,7 +17,8 @@ void FieldDrawer::update() {
 
 void FieldDrawer::update(const std::vector<sf::Vector2u> &path) {
     for (int i = 1; i + 1 < path.size(); i++)
-        set_color(path[i], sf::Color::Cyan);
+        if(field.get_cell(path[i]) == Cell::Empty)
+            set_color(path[i], sf::Color::Cyan);
 }
 
 sf::Color FieldDrawer::find_out_color(sf::Vector2u pos) const {

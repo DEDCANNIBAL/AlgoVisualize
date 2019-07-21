@@ -15,11 +15,10 @@
 
 
 int main() {
-    sf::Vector2u size(1000, 1000);
+    sf::Vector2u size(500, 500);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
-    field.randomize();
 
     BreadthFirstSearch path_finder(field);
     PathFinderManager path_finder_manager;
@@ -56,7 +55,12 @@ int main() {
         if (ImGui::RadioButton("BFS", true))
             path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
 
+        ImGui::End();
+
+        ImGui::Begin("Pathfinder UI");
+
         if (ImGui::Button("Start")) {
+            path_finder_manager.stop();
             path_finder_manager.start_in_thread();
         };
 
@@ -67,6 +71,13 @@ int main() {
         if (ImGui::Button("Stop")) {
             path_finder_manager.stop();
         };
+
+        if(ImGui::Button("Randomize")){
+            if (not path_finder_manager.is_working()) {
+                field.clear_obstacles();
+                field.randomize();
+            }
+        }
 
         ImGui::End();
 

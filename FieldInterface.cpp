@@ -23,8 +23,8 @@ auto FieldInterfaceFSM::init_fsm() {
     fsm[State::WallSpawn][Transition::EmptyPressed] = {State::WallSpawn, &spawn_wall};
     fsm[State::WallSpawn][Transition::NotPressed] = {State::None, &dummy};
 
-    fsm[State::StartMoving][Transition::EmptyPressed] = {State::None, &move_start};
-    fsm[State::FinishMoving][Transition::EmptyPressed] = {State::None, &move_finish};
+    fsm[State::StartMoving][Transition::EmptyPressed] = {State::StartMoving, &move_start};
+    fsm[State::FinishMoving][Transition::EmptyPressed] = {State::FinishMoving, &move_finish};
 
     fsm[State::StartMoving][Transition::NotPressed] = {State::None, &dummy};
     fsm[State::FinishMoving][Transition::NotPressed] = {State::None, &dummy};
