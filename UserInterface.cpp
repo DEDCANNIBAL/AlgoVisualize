@@ -44,10 +44,13 @@ void UserInterfaceFSM::init_fsm() {
 }
 
 void UserInterface::algorithms_interface() {
+    static int current_algorithm = 0;
     ImGui::Begin("Algorithms");
-    for (auto algorithm_name:list_of_algorithms)
-        if (ImGui::RadioButton(algorithm_name.c_str(), true))
-            actions[algorithm_name]();
+    for (int i = 0; i < list_of_algorithms.size(); i++)
+        if (ImGui::RadioButton(list_of_algorithms[i].c_str(), i == current_algorithm)) {
+            actions[list_of_algorithms[i]]();
+            current_algorithm = i;
+        }
     ImGui::End();
 }
 
@@ -79,5 +82,5 @@ uint UserInterface::get_transition(bool is_path_found) {
 UserInterface::UserInterface(sf::RenderWindow &window) :
         window(window), current_state(State::None) {
     init_fsm();
-    list_of_algorithms = {"BFS"};
+    list_of_algorithms = {"BFS", "A*"};
 }
