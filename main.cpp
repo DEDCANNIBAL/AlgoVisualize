@@ -15,7 +15,7 @@
 
 
 int main() {
-    sf::Vector2u size(500, 500);
+    sf::Vector2u size(1000, 1000);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
