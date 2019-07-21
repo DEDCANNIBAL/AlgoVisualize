@@ -33,6 +33,12 @@ public:
     bool is_working();
 
     const std::shared_ptr<PathFinder> &get_path_finder() const;
+
+    void prepare();
+
+    bool is_finished();
+
+    const std::vector<sf::Vector2u> &get_path() const;
 };
 
 

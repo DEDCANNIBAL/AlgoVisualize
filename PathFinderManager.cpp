@@ -42,3 +42,15 @@ bool PathFinderManager::is_working() {
 const std::shared_ptr<PathFinder> &PathFinderManager::get_path_finder() const {
     return path_finder;
 }
+
+void PathFinderManager::prepare() {
+    path_finder->prepare();
+}
+
+bool PathFinderManager::is_finished() {
+    return path_finder->is_finished();
+}
+
+const std::vector<sf::Vector2u> &PathFinderManager::get_path() const {
+    return path_finder->get_path();
+}

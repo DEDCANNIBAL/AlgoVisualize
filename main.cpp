@@ -45,13 +45,13 @@ int main() {
     });
     user_interface.add_action("Randomize", [&path_finder_manager, &field]() {
         field.clear_obstacles();
-        path_finder_manager.get_path_finder()->prepare();
+        path_finder_manager.prepare();
         field.randomize();
     });
     user_interface.add_action("Clear Walls", [&path_finder_manager, &field]() {
         path_finder_manager.stop();
         field.clear_obstacles();
-        path_finder_manager.get_path_finder()->prepare();
+        path_finder_manager.prepare();
     });
     user_interface.add_action("Restart", [&path_finder_manager]() {
         path_finder_manager.stop();
@@ -61,13 +61,13 @@ int main() {
         path_finder_manager.stop();
     });
     user_interface.add_action("Clear Path", [&path_finder_manager]() {
-        path_finder_manager.get_path_finder()->prepare();
+        path_finder_manager.prepare();
     });
     user_interface.add_action("Continue", [&path_finder_manager]() {
         path_finder_manager.proceed_in_thread();
     });
     user_interface.add_action("Cancel", [&path_finder_manager]() {
-        path_finder_manager.get_path_finder()->prepare();
+        path_finder_manager.prepare();
     });
     user_interface.add_action("Go to Start", [&camera]() {
 
@@ -92,11 +92,10 @@ int main() {
         auto world_pos = window.mapPixelToCoords(pixel_pos);
         auto mouse_pos = sf::Vector2i(static_cast<int> (world_pos.x), static_cast<int> (world_pos.y));
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
-        auto path_finder = path_finder_manager.get_path_finder();
-        user_interface.update(path_finder->is_finished());
+        user_interface.update(path_finder_manager.is_finished());
         field_drawer.update();
-        if (path_finder->is_finished())
-            field_drawer.update(path_finder->get_path());
+        if (path_finder_manager.is_finished())
+            field_drawer.update(path_finder_manager.get_path());
         if (not path_finder_manager.is_working())
             field_interface.update(cell_pos);
 
