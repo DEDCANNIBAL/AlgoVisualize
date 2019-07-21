@@ -26,32 +26,39 @@ namespace FieldInterfaceFSM {
             None = 0,
             WallSpawn,
             WallRemoving,
-            StartClicked,
             StartMoving,
-            FinishClicked,
             FinishMoving,
             Count
         };
     };
 
+    static std::vector<std::vector<std::pair<int, std::function<void(Field &, sf::Vector2u)>>>> fsm;
+
     void dummy(Field &, sf::Vector2u);
+
     void spawn_wall(Field &, sf::Vector2u);
+
     void remove_wall(Field &, sf::Vector2u);
+
     void move_start(Field &, sf::Vector2u);
+
     void move_finish(Field &, sf::Vector2u);
-    auto init_fsm();
+
+    void init_fsm();
 };
 
 
 class FieldInterface {
 
     Field &field;
-    uint get_transition(sf::Vector2u cell_pos);
-    int cur_state;
 
-    std::vector<std::vector<std::pair<int, std::function<void(Field &, sf::Vector2u)>>>> fsm;
+    uint get_transition(sf::Vector2u cell_pos);
+
+    int current_state;
+
 public:
     explicit FieldInterface(Field &field);
+
     void update(sf::Vector2u cell_pos);
 };
 

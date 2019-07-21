@@ -6,11 +6,9 @@
 using namespace FieldInterfaceFSM;
 
 
-auto FieldInterfaceFSM::init_fsm() {
-    auto fsm = std::vector<std::vector<std::pair<int, std::function<void(Field &, sf::Vector2u)>>>>(
-            State::Count,
-            std::vector<std::pair<int, std::function<void(Field &, sf::Vector2u)>>>(Transition::Count)
-    );
+void FieldInterfaceFSM::init_fsm() {
+    fsm.resize(State::Count,
+               std::vector<std::pair<int, std::function<void(Field &, sf::Vector2u)>>>(Transition::Count));
 
     fsm[State::None][Transition::WallPressed] = {State::WallRemoving, &dummy};
     fsm[State::None][Transition::EmptyPressed] = {State::WallSpawn, &dummy};
@@ -28,8 +26,6 @@ auto FieldInterfaceFSM::init_fsm() {
 
     fsm[State::StartMoving][Transition::NotPressed] = {State::None, &dummy};
     fsm[State::FinishMoving][Transition::NotPressed] = {State::None, &dummy};
-
-    return fsm;
 }
 
 void FieldInterfaceFSM::dummy(Field &, sf::Vector2u) {};
@@ -51,15 +47,16 @@ void FieldInterfaceFSM::move_finish(Field &field, sf::Vector2u cell_pos) {
 };
 
 FieldInterface::FieldInterface(Field &field) :
-        field(field), fsm(init_fsm()), cur_state(State::None) {
+        field(field), current_state(State::None) {
+    init_fsm();
 }
 
 void FieldInterface::update(sf::Vector2u cell_pos) {
     auto transition = get_transition(cell_pos);
-    auto [new_state, f] = fsm[cur_state][transition];
+    auto[new_state, f] = fsm[current_state][transition];
     if (f == nullptr) return;
     f(field, cell_pos);
-    cur_state = new_state;
+    current_state = new_state;
 }
 
 
