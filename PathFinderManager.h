@@ -1,19 +1,26 @@
 #ifndef ALGOVISUALIZE_PATHFINDERMANAGER_H
 #define ALGOVISUALIZE_PATHFINDERMANAGER_H
 
+#include <memory>
 #include "PathFinder.h"
 
 class PathFinderManager {
-    PathFinder *path_finder;
+    std::shared_ptr<PathFinder> path_finder;
     int delay;
     bool is_going;
+    Field &field;
 
     void proceed();
 
 public:
-    PathFinderManager();
+    PathFinderManager(Field&);
 
-    void set_algorithm(PathFinder *path_finder);
+    template <class PathFinderT>
+    void set_algorithm(){
+        path_finder = std::static_pointer_cast<PathFinder>(std::make_shared<PathFinderT>(field));
+
+        stop();
+    };
 
     void start_in_thread();
 
@@ -24,6 +31,8 @@ public:
     void set_delay(float delay);
 
     bool is_working();
+
+    const std::shared_ptr<PathFinder> &get_path_finder() const;
 };
 
 

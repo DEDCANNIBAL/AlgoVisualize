@@ -21,9 +21,8 @@ int main() {
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
 
-    BreadthFirstSearch path_finder(field);
-    PathFinderManager path_finder_manager;
-    path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
+    PathFinderManager path_finder_manager(field);
+    path_finder_manager.set_algorithm<BreadthFirstSearch>();
     path_finder_manager.set_delay(0.0001);
 
     sf::Vector2f window_size(1000, 1000);
@@ -37,22 +36,22 @@ int main() {
     FieldInterface field_interface(field);
     UserInterface user_interface(window);
 
-    user_interface.add_action("BFS", [&path_finder_manager, &path_finder]() {
-        path_finder_manager.set_algorithm(dynamic_cast<PathFinder *>(&path_finder));
+    user_interface.add_action("BFS", [&path_finder_manager]() {
+        path_finder_manager.set_algorithm<BreadthFirstSearch>();
     });
     user_interface.add_action("Start", [&path_finder_manager]() {
         path_finder_manager.stop();
         path_finder_manager.start_in_thread();
     });
-    user_interface.add_action("Randomize", [&path_finder, &field]() {
+    user_interface.add_action("Randomize", [&path_finder_manager, &field]() {
         field.clear_obstacles();
-        path_finder.prepare();
+        path_finder_manager.get_path_finder()->prepare();
         field.randomize();
     });
-    user_interface.add_action("Clear Walls", [&path_finder_manager, &path_finder, &field]() {
+    user_interface.add_action("Clear Walls", [&path_finder_manager, &field]() {
         path_finder_manager.stop();
         field.clear_obstacles();
-        path_finder.prepare();
+        path_finder_manager.get_path_finder()->prepare();
     });
     user_interface.add_action("Restart", [&path_finder_manager]() {
         path_finder_manager.stop();
@@ -61,14 +60,14 @@ int main() {
     user_interface.add_action("Pause", [&path_finder_manager]() {
         path_finder_manager.stop();
     });
-    user_interface.add_action("Clear Path", [&path_finder]() {
-        path_finder.prepare();
+    user_interface.add_action("Clear Path", [&path_finder_manager]() {
+        path_finder_manager.get_path_finder()->prepare();
     });
     user_interface.add_action("Continue", [&path_finder_manager]() {
         path_finder_manager.proceed_in_thread();
     });
-    user_interface.add_action("Cancel", [&path_finder]() {
-        path_finder.prepare();
+    user_interface.add_action("Cancel", [&path_finder_manager]() {
+        path_finder_manager.get_path_finder()->prepare();
     });
     user_interface.add_action("Go to Start", [&camera]() {
 
@@ -93,10 +92,11 @@ int main() {
         auto world_pos = window.mapPixelToCoords(pixel_pos);
         auto mouse_pos = sf::Vector2i(static_cast<int> (world_pos.x), static_cast<int> (world_pos.y));
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
-        user_interface.update(path_finder.is_finished());
+        auto path_finder = path_finder_manager.get_path_finder();
+        user_interface.update(path_finder->is_finished());
         field_drawer.update();
-        if (path_finder.is_finished())
-            field_drawer.update(path_finder.get_path());
+        if (path_finder->is_finished())
+            field_drawer.update(path_finder->get_path());
         if (not path_finder_manager.is_working())
             field_interface.update(cell_pos);
 

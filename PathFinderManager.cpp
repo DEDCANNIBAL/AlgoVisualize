@@ -3,17 +3,12 @@
 #include <thread>
 
 
-PathFinderManager::PathFinderManager() :
+PathFinderManager::PathFinderManager(Field &field) :
         path_finder(nullptr),
         delay(0),
-        is_going(false) {
-
-}
-
-void PathFinderManager::set_algorithm(PathFinder *path_finder) {
-    this->path_finder = path_finder;
-    stop();
-}
+        is_going(false),
+        field(field)
+        {}
 
 void PathFinderManager::proceed_in_thread() {
     if(is_going)
@@ -42,4 +37,8 @@ void PathFinderManager::set_delay(float delay) {
 
 bool PathFinderManager::is_working() {
     return not path_finder->is_finished();
+}
+
+const std::shared_ptr<PathFinder> &PathFinderManager::get_path_finder() const {
+    return path_finder;
 }
