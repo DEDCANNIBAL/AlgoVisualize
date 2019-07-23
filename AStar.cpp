@@ -12,7 +12,7 @@ void AStar::prepare() {
 void AStar::next() {
     if(is_finished())
         throw StopIterationError();
-    auto current_cell = queue.front();
+    auto current_cell = queue.top();
     queue.pop();
     if (current_cell == finish) {
         restore_path();
@@ -21,6 +21,16 @@ void AStar::next() {
     process_adjacent_cells(current_cell);
     if(queue.empty())
         finished = true;
+}
+
+AStar::AStar(Field &field) :
+    PathFinder(field),
+    queue(vector_comparator()){
+
+}
+
+bool vector_comparator::operator()(const sf::Vector2u a, const sf::Vector2u b) const {
+    return false;
 }
 
 void AStar::process_adjacent_cells(sf::Vector2u cell) {
