@@ -24,13 +24,21 @@ void PathFinder::restore_path() {
     std::reverse(path.begin(), path.end());
 }
 
-void PathFinder::prepare() {
+void PathFinder::clear() {
     field.reset_visited();
+    path.clear();
     start = field.get_start();
     finish = field.get_finish();
-    finished = false;
-    path.clear();
     dist.assign(size.x, std::vector<uint>(size.y, UINT_MAX - 1));
     dist[start.x][start.y] = 0;
 }
 
+void PathFinder::prepare() {
+    clear();
+    finished = false;
+}
+
+void PathFinder::finish_search() {
+    finished = true;
+    clear();
+}

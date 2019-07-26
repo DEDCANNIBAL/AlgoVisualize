@@ -32,6 +32,10 @@ public:
 
     virtual void prepare();
 
+    void clear();
+
+    void finish_search();
+
     bool is_finished() const { return finished; }
 
     virtual void next() = 0;

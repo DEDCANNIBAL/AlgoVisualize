@@ -30,13 +30,15 @@ public:
 
     void set_delay(float delay);
 
-    bool is_working();
+    bool is_finished();
+
+    void clear() {path_finder->clear();}
+
+    void finish_search() {path_finder->finish_search();}
 
     const std::shared_ptr<PathFinder> &get_path_finder() const;
 
     void prepare();
-
-    bool is_finished();
 
     const std::vector<sf::Vector2u> &get_path() const;
 };

@@ -35,8 +35,8 @@ void PathFinderManager::set_delay(float delay) {
     this->delay = static_cast<int> (delay * 1e6);
 }
 
-bool PathFinderManager::is_working() {
-    return not path_finder->is_finished();
+bool PathFinderManager::is_finished() {
+    return path_finder->is_finished();
 }
 
 const std::shared_ptr<PathFinder> &PathFinderManager::get_path_finder() const {
@@ -45,10 +45,6 @@ const std::shared_ptr<PathFinder> &PathFinderManager::get_path_finder() const {
 
 void PathFinderManager::prepare() {
     path_finder->prepare();
-}
-
-bool PathFinderManager::is_finished() {
-    return path_finder->is_finished();
 }
 
 const std::vector<sf::Vector2u> &PathFinderManager::get_path() const {

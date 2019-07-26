@@ -17,6 +17,7 @@ void BreadthFirstSearch::next() {
     if (current_cell == finish) {
         restore_path();
         finished = true;
+        return;
     }
     process_adjacent_cells(current_cell);
     if(queue.empty())

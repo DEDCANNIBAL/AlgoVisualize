@@ -34,6 +34,8 @@ uint8_t Field::get_cell(sf::Vector2u pos) const {
 
 void Field::clear_obstacles() {
     obstacles.assign(size.x, std::vector<u_int8_t>(size.y, Cell::Empty));
+    set_start(start);
+    set_finish(finish);
     change_all_cells();
 }
 

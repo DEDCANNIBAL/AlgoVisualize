@@ -49,13 +49,12 @@ int main() {
     });
     user_interface.add_action("Randomize", [&path_finder_manager, &field]() {
         field.clear_obstacles();
-        path_finder_manager.prepare();
+        path_finder_manager.clear();
         field.randomize();
     });
     user_interface.add_action("Clear Walls", [&path_finder_manager, &field]() {
-        path_finder_manager.stop();
+        path_finder_manager.finish_search();
         field.clear_obstacles();
-        path_finder_manager.prepare();
     });
     user_interface.add_action("Restart", [&path_finder_manager]() {
         path_finder_manager.stop();
@@ -65,13 +64,13 @@ int main() {
         path_finder_manager.stop();
     });
     user_interface.add_action("Clear Path", [&path_finder_manager]() {
-        path_finder_manager.prepare();
+        path_finder_manager.clear();
     });
     user_interface.add_action("Continue", [&path_finder_manager]() {
         path_finder_manager.proceed_in_thread();
     });
     user_interface.add_action("Cancel", [&path_finder_manager]() {
-        path_finder_manager.prepare();
+        path_finder_manager.finish_search();
     });
     user_interface.add_action("Go to Start", [&camera]() {
 
@@ -98,10 +97,10 @@ int main() {
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
         user_interface.update(path_finder_manager.is_finished());
         field_drawer.update();
-        if (path_finder_manager.is_finished())
+        if (path_finder_manager.is_finished()) {
             field_drawer.update(path_finder_manager.get_path());
-        if (not path_finder_manager.is_working())
             field_interface.update(cell_pos);
+        }
 
         camera.setView();
         window.clear(sf::Color::White);
