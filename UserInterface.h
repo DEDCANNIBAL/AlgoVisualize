@@ -48,6 +48,7 @@ class UserInterface {
     uint get_transition(bool is_path_found);
     void algorithms_interface();
     sf::Clock delta_clock;
+    float delay;
 
 public:
     explicit UserInterface(sf::RenderWindow &window);
@@ -57,6 +58,8 @@ public:
     void update(bool is_path_found);
 
     void render() {ImGui::SFML::Render(window);}
+
+    float getDelay() const;
 };
 
 

@@ -51,6 +51,9 @@ void UserInterface::algorithms_interface() {
             actions[list_of_algorithms[i]]();
             current_algorithm = i;
         }
+    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .001f, "%f", 3)){
+        actions["Delay"]();
+    }
     ImGui::End();
 }
 
@@ -80,7 +83,11 @@ uint UserInterface::get_transition(bool is_path_found) {
 }
 
 UserInterface::UserInterface(sf::RenderWindow &window) :
-        window(window), current_state(State::None) {
+        window(window), current_state(State::None), delay(0){
     init_fsm();
     list_of_algorithms = {"BFS", "A*"};
+}
+
+float UserInterface::getDelay() const {
+    return delay;
 }

@@ -72,11 +72,18 @@ int main() {
     user_interface.add_action("Cancel", [&path_finder_manager]() {
         path_finder_manager.finish_search();
     });
-    user_interface.add_action("Go to Start", [&camera]() {
-
+    user_interface.add_action("Delay", [&user_interface, &path_finder_manager]() {
+        path_finder_manager.set_delay(user_interface.getDelay());
     });
-    user_interface.add_action("Go to Finish", [&camera]() {
-
+    user_interface.add_action("Go to Start", [&camera, &field, &cell_size]() {
+        camera.set_center(
+                static_cast<sf::Vector2f>(field.get_start() * static_cast<uint>(cell_size))
+        );
+    });
+    user_interface.add_action("Go to Finish", [&camera, &field, &cell_size]() {
+        camera.set_center(
+                static_cast<sf::Vector2f>(field.get_finish() * static_cast<uint>(cell_size))
+        );
     });
 
     while (window.isOpen()) {

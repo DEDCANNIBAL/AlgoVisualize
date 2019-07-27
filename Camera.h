@@ -18,6 +18,8 @@ public:
     void updateEvent(const sf::Event &event);
 
     void setView() { window.setView(view); };
+
+    void set_center(sf::Vector2f center){view.setCenter(center);}
 };
 
 
