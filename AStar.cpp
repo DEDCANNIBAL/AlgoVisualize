@@ -6,40 +6,44 @@ void AStar::prepare() {
     PathFinder::prepare();
     while (!queue.empty())
         queue.pop();
-    queue.push(start);
+    queue.push({0, start});
 }
 
 void AStar::next() {
-    if(is_finished())
+    if (is_finished())
         throw StopIterationError();
-    auto current_cell = queue.top();
+    auto [rate, current_cell] = queue.top();
     queue.pop();
     if (current_cell == finish) {
         restore_path();
         finished = true;
+        return;
     }
     process_adjacent_cells(current_cell);
-    if(queue.empty())
+    if (queue.empty())
         finished = true;
 }
 
 AStar::AStar(Field &field) :
-    PathFinder(field),
-    queue(vector_comparator()){
+        PathFinder(field) {
 
 }
 
-bool vector_comparator::operator()(const sf::Vector2u a, const sf::Vector2u b) const {
-    return false;
-}
-
-void AStar::process_adjacent_cells(sf::Vector2u cell) {
+void AStar::process_adjacent_cells(astar_vec2u cell) {
     for (auto &shift : shifts) {
-        sf::Vector2u adjacent_cell = cell + shift;
+        astar_vec2u adjacent_cell = cell + shift;
         if (field.visit_cell(adjacent_cell) != Cell::Wall &&
             dist[adjacent_cell.x][adjacent_cell.y] > dist[cell.x][cell.y] + 1) {
             dist[adjacent_cell.x][adjacent_cell.y] = dist[cell.x][cell.y] + 1;
-            queue.push(adjacent_cell);
+            queue.push({
+                -dist[adjacent_cell.x][adjacent_cell.y] - heuristic(adjacent_cell),
+                adjacent_cell
+            });
         }
     }
+}
+
+int AStar::heuristic(astar_vec2u &cell) {
+    return abs(finish.x - cell.x) +
+           abs(finish.y - cell.y);
 }

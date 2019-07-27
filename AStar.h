@@ -3,15 +3,23 @@
 
 #include "PathFinder.h"
 
-struct vector_comparator{
 
-    bool operator()(const sf::Vector2u a, const sf::Vector2u b) const;
+struct astar_vec2u : public sf::Vector2u{
+    astar_vec2u(const sf::Vector2u &vector) : sf::Vector2u(vector) {}
+
+    astar_vec2u(unsigned int x, unsigned int y) : sf::Vector2u(x, y) {}
+
+    astar_vec2u() {}
+
+    inline bool operator<(astar_vec2u &o){return false;}
 };
 
 class AStar : public PathFinder {
-    std::priority_queue<sf::Vector2u, std::vector<sf::Vector2u>, vector_comparator> queue;
+    std::priority_queue<std::pair<int, astar_vec2u>> queue;
 
-    void process_adjacent_cells(sf::Vector2u cell);
+    void process_adjacent_cells(astar_vec2u cell);
+
+    int heuristic(astar_vec2u &cell);
 public:
     explicit AStar(Field &field);
 

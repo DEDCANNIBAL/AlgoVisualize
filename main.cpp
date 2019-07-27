@@ -24,7 +24,7 @@ int main() {
 
     PathFinderManager path_finder_manager(field);
     path_finder_manager.set_algorithm<BreadthFirstSearch>();
-    path_finder_manager.set_delay(0.0001);
+    path_finder_manager.set_delay(0.000000001);
 
     sf::Vector2f window_size(1000, 1000);
     auto window_width_in_cells = window_size.x / cell_size - 1;
