@@ -27,7 +27,7 @@ void UserInterfaceFSM::init_fsm() {
     fsm[State::Pause][Transition::ClearWallsPressed] = State::None;
     fsm[State::Pause][Transition::ClearPathPressed] = State::None;
 
-    button_for_state[State::None] = {"Start", "Randomize", "Clear Walls", "Go to Start", "Go to Finish"};
+    button_for_state[State::None] = {"Start", "Randomize", "Generate maze", "Clear Walls", "Go to Start", "Go to Finish"};
     button_for_state[State::PathFinding] = {"Restart", "Pause", "Clear Walls", "Go to Start", "Go to Finish"};
     button_for_state[State::PathFound] = {"Restart", "Clear Path", "Clear Walls",
                                           "Go to Start", "Go to Finish"};
@@ -51,7 +51,7 @@ void UserInterface::algorithms_interface() {
             actions[list_of_algorithms[i]]();
             current_algorithm = i;
         }
-    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .001f, "%f", 3)){
+    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .01f, "%f", 3)){
         actions["Delay"]();
     }
     ImGui::End();

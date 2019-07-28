@@ -14,10 +14,11 @@
 #include "FieldInterface.h"
 #include "Camera.h"
 #include "UserInterface.h"
+#include "maze_generator.h"
 
 
 int main() {
-    sf::Vector2u size(1000, 1000);
+    sf::Vector2u size(500, 500);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
@@ -84,6 +85,9 @@ int main() {
         camera.set_center(
                 static_cast<sf::Vector2f>(field.get_finish() * static_cast<uint>(cell_size))
         );
+    });
+    user_interface.add_action("Generate maze", [&field]() {
+        FieldGenerator(field).generate_maze();
     });
 
     while (window.isOpen()) {

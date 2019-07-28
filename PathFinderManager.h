@@ -41,6 +41,8 @@ public:
     void prepare();
 
     const std::vector<sf::Vector2u> &get_path() const;
+
+    const std::vector<sf::Vector2u> &find_and_return_path();
 };
 
 

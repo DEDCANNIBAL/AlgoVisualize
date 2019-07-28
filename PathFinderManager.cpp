@@ -50,3 +50,10 @@ void PathFinderManager::prepare() {
 const std::vector<sf::Vector2u> &PathFinderManager::get_path() const {
     return path_finder->get_path();
 }
+
+const std::vector<sf::Vector2u> &PathFinderManager::find_and_return_path() {
+    path_finder->prepare();
+    is_going = true;
+    proceed();
+    return path_finder->get_path();
+}

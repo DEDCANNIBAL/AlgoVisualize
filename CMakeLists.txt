@@ -14,5 +14,5 @@ add_executable(AlgoVisualize main.cpp lib/imgui/imgui.cpp lib/imgui/imgui_draw.c
         AStar.cpp FieldDrawer.cpp FieldDrawer.h PathFinder.cpp PathFinder.h FieldInterface.cpp
         FieldInterface.h BreadthFirstSearch.cpp BreadthFirstSearch.h PathFinderManager.cpp
         PathFinderManager.h SafeVector.cpp SafeVector.h Camera.cpp Camera.h UserInterface.cpp
-        UserInterface.h)
+        UserInterface.h maze_generator.cpp maze_generator.h)
 target_link_libraries(AlgoVisualize sfml-graphics sfml-window sfml-system GL pthread)
