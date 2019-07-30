@@ -117,7 +117,7 @@ sf::Vector2i FieldGenerator::get_random_wall_of_room_not_adjacent_to_corridor(Ro
         auto wall_number = 0;
         for (auto shift: shifts)
             wall_number +=
-                    field.get_cell(static_cast<sf::Vector2u>(wall + shift)) == Cell::Wall;
+                    wall_field.get_cell(static_cast<sf::Vector2u>(wall + shift)) == Cell::Wall;
         if (wall_number == 3)
             return wall;
     }
