@@ -5,18 +5,22 @@
 #include "Field.h"
 #include "PathFinderManager.h"
 #include "AStar.h"
+#include "BreadthFirstSearch.h"
+#include "utils.h"
 
 using namespace std::experimental;
 
 const int GRID_SIZE = 50;
 const int MIN_SIZE = 5;
 const int MAX_SIZE = 30;
-const float ROOM_RATE = 0.50;
+const float ROOM_RATE = 0.80;
 const float CORRIDORS_LINEARITY = 0.90;
 
 FieldGenerator::FieldGenerator(Field &field) :
         field(field),
-        wall_field(field.get_size()) {
+        wall_field(field.get_size()),
+        grid_width((field.get_size().x - 2) / GRID_SIZE),
+        grid_height((field.get_size().y - 2) / GRID_SIZE) {
     prepare_field();
     prepare_wall_field();
 }
@@ -54,22 +58,25 @@ void FieldGenerator::generate_maze() {
 
 void FieldGenerator::create_rooms() {
     auto[width, height] = field.get_size();
-    for (int grid_x = 2; grid_x + GRID_SIZE < width - 1; grid_x += GRID_SIZE)
-        for (int grid_y = 2; grid_y + GRID_SIZE < height - 1; grid_y += GRID_SIZE)
+    rooms_grid.resize(width, std::vector<std::optional<Room >>(height));
+    for (int grid_x = 2, grid_i = 0; grid_i < grid_width; grid_x += GRID_SIZE, grid_i++)
+        for (int grid_y = 2, grid_j = 0; grid_j < grid_height; grid_y += GRID_SIZE, grid_j++)
             if (roll(ROOM_RATE)) {
-                create_room(grid_x, grid_y);
+                rooms_grid[grid_i][grid_j] = create_room(grid_x, grid_y);
             }
 }
 
 void FieldGenerator::create_corridors() {
-    for (int i = 0; i < rooms.size(); i++) {
-        auto room1 = rooms[i];
-        auto room2 = rooms[(i + randint(0ul, rooms.size() - 1)) % rooms.size()];
-        make_corridor_between(
-                get_random_wall_of_room_not_adjacent_to_corridor(room1),
-                get_random_wall_of_room_not_adjacent_to_corridor(room2)
-        );
-    }
+    for (int i = 0; i < grid_width; i++)
+        for (int j = 0; j < grid_height; j++){
+            if (not rooms_grid[i][j].has_value()) continue;
+            auto room1 = *rooms_grid[i][j];
+            auto room2 = get_random_adjacent_room(i, j);
+            make_corridor_between(
+                    get_random_wall_of_room_not_adjacent_to_corridor(room1),
+                    get_random_wall_of_room_not_adjacent_to_corridor(room2)
+            );
+        }
     make_corridor_between(
             get_random_wall_of_room_not_adjacent_to_corridor(get_random_room()),
             static_cast<sf::Vector2i>(field.get_start())
@@ -80,14 +87,14 @@ void FieldGenerator::create_corridors() {
     );
 }
 
-void FieldGenerator::create_room(int grid_x, int grid_y) {
+Room FieldGenerator::create_room(int grid_x, int grid_y) {
     auto width = randint(MIN_SIZE, MAX_SIZE);
     auto height = randint(MIN_SIZE, MAX_SIZE);
     auto room_x = randint(grid_x, grid_x + GRID_SIZE - width);
     auto room_y = randint(grid_y, grid_y + GRID_SIZE - height);
     Room room({room_x, room_y}, {width, height});
-    rooms.push_back(room);
     spawn_room(room);
+    return room;
 }
 
 void FieldGenerator::spawn_room(Room room) {
@@ -142,7 +149,24 @@ void FieldGenerator::make_corridor_between(sf::Vector2i cell1, sf::Vector2i cell
 }
 
 Room &FieldGenerator::get_random_room() {
-    return rooms[randint(0ul, rooms.size() - 1)];
+    while (true) {
+        auto room = rooms_grid[randint(0ul, grid_width - 1)][randint(0ul, grid_height - 1)];
+        if (room.has_value())
+            return *room;
+    }
+}
+
+Room FieldGenerator::get_random_adjacent_room(size_t grid_i, size_t grid_j) {
+    static const std::vector<std::pair<int, int>> shifts = {{-1, -1}, {-1, 0}, {-1, 1},
+                                                            {0,  -1},          {0,  1},
+                                                            {1,  -1}, {1, 0},  {1, 1}};
+    std::vector<Room> adjacent_rooms;
+    for (auto [shift_i, shift_j]: shifts){
+        auto i = grid_i + shift_i, j = grid_j + shift_j;
+        if (i < grid_width and j < grid_height and rooms_grid[i][j].has_value())
+            adjacent_rooms.push_back(*rooms_grid[i][j]);
+    }
+    return choice(adjacent_rooms);
 }
 
 inline bool roll(float chance) {
