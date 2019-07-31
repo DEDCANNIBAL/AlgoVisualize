@@ -6,7 +6,7 @@
 #include <SFML/Window/Event.hpp>
 #include <functional>
 
-#include "Field.h"
+#include "../Field.h"
 
 
 namespace FieldInterfaceFSM {

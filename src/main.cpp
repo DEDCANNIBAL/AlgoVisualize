@@ -7,16 +7,16 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include "FieldDrawer.h"
-#include "BreadthFirstSearch.h"
+#include "visual/FieldDrawer.h"
+#include "path_finders/BreadthFirstSearch.h"
 #include "PathFinderManager.h"
-#include "TestSearch.h"
-#include "FastSearch.h"
-#include "AStar.h"
-#include "FieldInterface.h"
-#include "Camera.h"
-#include "UserInterface.h"
-#include "maze_generator.h"
+#include "path_finders/TestSearch.h"
+#include "path_finders/FastSearch.h"
+#include "path_finders/AStar.h"
+#include "visual/FieldInterface.h"
+#include "visual/Camera.h"
+#include "visual/UserInterface.h"
+#include "field_generators/maze_generator.h"
 
 
 int main() {

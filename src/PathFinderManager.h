@@ -2,7 +2,7 @@
 #define ALGOVISUALIZE_PATHFINDERMANAGER_H
 
 #include <memory>
-#include "PathFinder.h"
+#include "path_finders/PathFinder.h"
 
 class PathFinderManager {
     std::shared_ptr<PathFinder> path_finder;

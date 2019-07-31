@@ -2,7 +2,7 @@
 #define ALGOVISUALIZE_FIELDDRAWER_H
 
 #include <SFML/Graphics.hpp>
-#include "Field.h"
+#include "../Field.h"
 
 class FieldDrawer : public sf::Drawable, public sf::Transformable {
     sf::Vector2u size;

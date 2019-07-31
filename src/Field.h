@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <SFML/System/Vector2.hpp>
-#include "SafeVector.h"
+#include "utils/SafeVector.h"
 
 
 bool operator<(const sf::Vector2u &a, const sf::Vector2u &b);

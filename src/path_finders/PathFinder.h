@@ -6,7 +6,7 @@
 #include <climits>
 #include <queue>
 #include <sys/types.h>
-#include "Field.h"
+#include "../Field.h"
 
 
 class StopIterationError : public std::exception {

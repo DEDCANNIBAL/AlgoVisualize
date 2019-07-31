@@ -9,11 +9,11 @@ link_directories(lib/sfml/lib)
 include_directories(lib/imgui)
 include_directories(lib/imgui-sfml)
 
-add_executable(AlgoVisualize main.cpp lib/imgui/imgui.cpp lib/imgui/imgui_draw.cpp
-        lib/imgui-sfml/imgui-SFML.cpp lib/imgui/imgui_widgets.cpp Field.cpp Field.h
-        AStar.cpp FieldDrawer.cpp FieldDrawer.h PathFinder.cpp PathFinder.h FieldInterface.cpp
-        FieldInterface.h BreadthFirstSearch.cpp BreadthFirstSearch.h PathFinderManager.cpp
-        PathFinderManager.h SafeVector.cpp SafeVector.h Camera.cpp Camera.h UserInterface.cpp
-        UserInterface.h maze_generator.cpp maze_generator.h utils.cpp utils.h FastSearch.cpp
-        FastSearch.h TestSearch.h TestSearch.cpp)
+add_executable(AlgoVisualize src/main.cpp lib/imgui/imgui.cpp lib/imgui/imgui_draw.cpp
+        lib/imgui-sfml/imgui-SFML.cpp lib/imgui/imgui_widgets.cpp src/Field.cpp src/Field.h
+        src/path_finders/AStar.cpp src/visual/FieldDrawer.cpp src/visual/FieldDrawer.h src/path_finders/PathFinder.cpp src/path_finders/PathFinder.h src/visual/FieldInterface.cpp
+        src/visual/FieldInterface.h src/path_finders/BreadthFirstSearch.cpp src/path_finders/BreadthFirstSearch.h src/PathFinderManager.cpp
+        src/PathFinderManager.h src/utils/SafeVector.cpp src/utils/SafeVector.h src/visual/Camera.cpp src/visual/Camera.h src/visual/UserInterface.cpp
+        src/visual/UserInterface.h src/field_generators/maze_generator.cpp src/field_generators/maze_generator.h src/utils/utils.cpp src/utils/utils.h src/path_finders/FastSearch.cpp
+        src/path_finders/FastSearch.h src/path_finders/TestSearch.h src/path_finders/TestSearch.cpp)
 target_link_libraries(AlgoVisualize sfml-graphics sfml-window sfml-system GL pthread)

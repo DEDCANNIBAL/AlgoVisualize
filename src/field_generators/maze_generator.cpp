@@ -2,11 +2,11 @@
 #include <experimental/random>
 
 #include "maze_generator.h"
-#include "Field.h"
-#include "PathFinderManager.h"
-#include "AStar.h"
-#include "BreadthFirstSearch.h"
-#include "utils.h"
+#include "../Field.h"
+#include "../PathFinderManager.h"
+#include "../path_finders/AStar.h"
+#include "../path_finders/BreadthFirstSearch.h"
+#include "../utils/utils.h"
 
 using namespace std::experimental;
 
