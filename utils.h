@@ -1,16 +1,14 @@
 #ifndef ALGOVISUALIZE_UTILS_H
 #define ALGOVISUALIZE_UTILS_H
 
-#include <random>
-#include <algorithm>
+#include <experimental/random>
 
 template <class T>
 auto choice(T &contaner){
-    static auto generator = std::mt19937{std::random_device{}()};
-    static T samples_container;
-    std::sample(contaner.begin(), contaner.end(),
-                std::back_inserter(samples_container), 1, generator);
-    return *--samples_container.end();
+    auto index = std::experimental::randint(0ul, contaner.size() - 1);
+    for(auto element:contaner)
+        if(not index--)
+            return element;
 }
 
 #endif //ALGOVISUALIZE_UTILS_H
