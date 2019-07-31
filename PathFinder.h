@@ -36,6 +36,8 @@ public:
 
     void finish_search();
 
+    bool is_visited(sf::Vector2u cell);
+
     bool is_finished() const { return finished; }
 
     virtual void next() = 0;

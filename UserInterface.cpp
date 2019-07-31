@@ -85,7 +85,7 @@ uint UserInterface::get_transition(bool is_path_found) {
 UserInterface::UserInterface(sf::RenderWindow &window) :
         window(window), current_state(State::None), delay(0){
     init_fsm();
-    list_of_algorithms = {"BFS", "A*", "Fast Search"};
+    list_of_algorithms = {"BFS", "A*", "Fast Search", "Experimental Search"};
 }
 
 float UserInterface::getDelay() const {

@@ -42,3 +42,7 @@ void PathFinder::finish_search() {
     finished = true;
     clear();
 }
+
+bool PathFinder::is_visited(sf::Vector2u cell) {
+    return cell < size and field.is_visited(cell) or not (cell < size);
+}
