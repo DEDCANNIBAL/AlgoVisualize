@@ -19,7 +19,7 @@ class AStar : public PathFinder {
 
     void process_adjacent_cells(astar_vec2u cell);
 
-    int heuristic(astar_vec2u &cell);
+    virtual int heuristic(astar_vec2u &cell);
 public:
     explicit AStar(Field &field);
 

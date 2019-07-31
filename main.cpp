@@ -10,6 +10,7 @@
 #include "FieldDrawer.h"
 #include "BreadthFirstSearch.h"
 #include "PathFinderManager.h"
+#include "FastSearch.h"
 #include "AStar.h"
 #include "FieldInterface.h"
 #include "Camera.h"
@@ -43,6 +44,9 @@ int main() {
     });
     user_interface.add_action("A*", [&path_finder_manager]() {
         path_finder_manager.set_algorithm<AStar>();
+    });
+    user_interface.add_action("Fast Search", [&path_finder_manager]() {
+        path_finder_manager.set_algorithm<FastSearch>();
     });
     user_interface.add_action("Start", [&path_finder_manager]() {
         path_finder_manager.stop();
