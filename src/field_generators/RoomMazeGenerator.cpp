@@ -3,9 +3,8 @@
 
 #include "RoomMazeGenerator.h"
 #include "../PathFinderManager.h"
-#include "../path_finders/AStar.h"
-#include "../path_finders/BreadthFirstSearch.h"
 #include "../utils/utils.h"
+#include "../path_finders/FastSearch.h"
 
 using namespace std::experimental;
 
@@ -108,7 +107,7 @@ sf::Vector2i RoomMazeGenerator::get_random_wall_of_room(Room room) {
 
 void RoomMazeGenerator::make_corridor_between(sf::Vector2i cell1, sf::Vector2i cell2) {
     PathFinderManager manager(wall_field);
-    manager.set_algorithm<AStar>();
+    manager.set_algorithm<FastSearch>();
     wall_field.set_start(static_cast<sf::Vector2u>(cell1));
     wall_field.set_finish(static_cast<sf::Vector2u>(cell2));
     wall_field.set_cell(static_cast<sf::Vector2u>(cell1), Cell::Empty);

@@ -3,6 +3,7 @@
 
 
 using namespace UserInterfaceFSM;
+using namespace std::string_literals;
 
 const uint NULL_STATE = UINT_MAX;
 
@@ -27,7 +28,12 @@ void UserInterfaceFSM::init_fsm() {
     fsm[State::Pause][Transition::ClearWallsPressed] = State::None;
     fsm[State::Pause][Transition::ClearPathPressed] = State::None;
 
-    button_for_state[State::None] = {"Start", "Randomize", "Generate Maze with Rooms", "Clear Walls", "Go to Start", "Go to Finish"};
+    button_for_state[State::None] = {
+            "Start",
+            "Clear Walls",
+            std::vector{"Randomize"s, "Generate Maze with Rooms"s},
+            std::vector{"Go to Start"s, "Go to Finish"s}
+    };
     button_for_state[State::PathFinding] = {"Restart", "Pause", "Clear Walls", "Go to Start", "Go to Finish"};
     button_for_state[State::PathFound] = {"Restart", "Clear Path", "Clear Walls",
                                           "Go to Start", "Go to Finish"};
@@ -51,7 +57,7 @@ void UserInterface::algorithms_interface() {
             actions[list_of_algorithms[i]]();
             current_algorithm = i;
         }
-    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .01f, "%f", 3)){
+    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .01f, "%f", 3)) {
         actions["Delay"]();
     }
     ImGui::End();
@@ -71,19 +77,37 @@ void UserInterface::update(bool is_path_found) {
 uint UserInterface::get_transition(bool is_path_found) {
     ImGui::Begin("Control Panel");
     uint transition = Transition::NotPressed;
-    for (auto action_name:button_for_state[current_state])
-        if (ImGui::Button(action_name.c_str())) {
-            actions[action_name]();
-            transition = transition_for_action[action_name];
-        }
+    for (auto &arg: button_for_state[current_state])
+        std::visit([&transition, this](auto &&arg) {
+            using T = std::decay_t<decltype(arg)>;
+            if constexpr(std::is_same<T, std::string>::value) {
+                if (make_button(arg))
+                    transition = transition_for_action[arg];
+            }else {
+                ImGui::TextColored(ImVec4(1,1,0,1), "Important Stuff");
+                ImGui::BeginChild("Scrolling");
+                for (auto action_name: arg)
+                    if (make_button(action_name))
+                        transition = transition_for_action[action_name];
+                ImGui::EndChild();
+            }
+        }, arg);
     ImGui::End();
+
     if (is_path_found and current_state == State::PathFinding)
         transition = Transition::PathFound;
     return transition;
 }
 
+bool UserInterface::make_button(std::string &action_name) {
+    if (ImGui::Button(action_name.c_str())) {
+        actions[action_name]();
+        return transition_for_action[action_name];
+    }
+}
+
 UserInterface::UserInterface(sf::RenderWindow &window) :
-        window(window), current_state(State::None), delay(0){
+        window(window), current_state(State::None), delay(0) {
     init_fsm();
     list_of_algorithms = {"BFS", "A*", "Fast Search", "Experimental Search"};
 }
