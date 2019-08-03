@@ -4,10 +4,10 @@
 #include <functional>
 #include <variant>
 #include <unordered_map>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
-
 
 
 namespace UserInterfaceFSM {
@@ -20,7 +20,6 @@ namespace UserInterfaceFSM {
             ContinuePressed,
             ClearPathPressed,
             ClearWallsPressed,
-            RandomizePressed,
             Count
         };
     };
@@ -35,8 +34,10 @@ namespace UserInterfaceFSM {
         };
     };
     static std::vector<std::vector<uint>> fsm;
-    static std::vector<std::vector<std::variant<std::string, std::vector<std::string>>>> button_for_state;
+    static std::vector<std::vector<std::variant<std::string,
+            std::pair<std::string, std::vector<std::string>>>>> button_for_state;
     static std::unordered_map<std::string, uint> transition_for_action;
+
     void init_fsm();
 };
 
@@ -46,10 +47,12 @@ class UserInterface {
     std::unordered_map<std::string, std::function<void()>> actions;
     std::vector<std::string> list_of_algorithms;
     uint current_state;
-    uint get_transition(bool is_path_found);
-    void algorithms_interface();
     sf::Clock delta_clock;
     float delay;
+
+    uint get_transition(bool is_path_found);
+
+    void algorithms_interface();
 
 public:
     explicit UserInterface(sf::RenderWindow &window);
@@ -58,7 +61,7 @@ public:
 
     void update(bool is_path_found);
 
-    void render() {ImGui::SFML::Render(window);}
+    void render() { ImGui::SFML::Render(window); }
 
     float getDelay() const;
 

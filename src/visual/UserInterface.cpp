@@ -1,4 +1,5 @@
 #include <climits>
+
 #include "UserInterface.h"
 
 
@@ -28,17 +29,30 @@ void UserInterfaceFSM::init_fsm() {
     fsm[State::Pause][Transition::ClearWallsPressed] = State::None;
     fsm[State::Pause][Transition::ClearPathPressed] = State::None;
 
+    auto field_generators = std::make_pair("Field Generators"s,
+                                           std::vector{"Randomize"s, "Generate Maze with Rooms"s});
+    auto camera_manipulators = std::make_pair("Camera Manipulators"s,
+                                              std::vector{"Go to Start"s, "Go to Finish"s});
     button_for_state[State::None] = {
             "Start",
             "Clear Walls",
-            std::vector{"Randomize"s, "Generate Maze with Rooms"s},
-            std::vector{"Go to Start"s, "Go to Finish"s}
-    };
-    button_for_state[State::PathFinding] = {"Restart", "Pause", "Clear Walls", "Go to Start", "Go to Finish"};
-    button_for_state[State::PathFound] = {"Restart", "Clear Path", "Clear Walls",
-                                          "Go to Start", "Go to Finish"};
-    button_for_state[State::Pause] = {"Continue", "Cancel", "Clear Walls",
-                                      "Go to Start", "Go to Finish"};
+            field_generators,
+            camera_manipulators};
+    button_for_state[State::PathFinding] = {
+            "Restart",
+            "Pause",
+            "Clear Walls",
+            camera_manipulators};
+    button_for_state[State::PathFound] = {
+            "Restart",
+            "Clear Path",
+            "Clear Walls",
+            camera_manipulators};
+    button_for_state[State::Pause] = {
+            "Continue",
+            "Cancel",
+            "Clear Walls",
+            camera_manipulators};
 
     transition_for_action["Start"] = Transition::StartPressed;
     transition_for_action["Clear Walls"] = Transition::ClearWallsPressed;
@@ -83,13 +97,12 @@ uint UserInterface::get_transition(bool is_path_found) {
             if constexpr(std::is_same<T, std::string>::value) {
                 if (make_button(arg))
                     transition = transition_for_action[arg];
-            }else {
-                ImGui::TextColored(ImVec4(1,1,0,1), "Important Stuff");
-                ImGui::BeginChild("Scrolling");
-                for (auto action_name: arg)
-                    if (make_button(action_name))
-                        transition = transition_for_action[action_name];
-                ImGui::EndChild();
+            } else {
+                if (ImGui::CollapsingHeader(arg.first.c_str())) {
+                    for (auto action_name: arg.second)
+                        if (make_button(action_name))
+                            transition = transition_for_action[action_name];
+                }
             }
         }, arg);
     ImGui::End();
