@@ -39,21 +39,6 @@ void Field::clear_obstacles() {
     change_all_cells();
 }
 
-void Field::randomize() {
-    const static float wall_percent = 0.45;
-    static std::random_device rd;
-    static std::default_random_engine gen(rd());
-    static std::uniform_int_distribution<> distribution_x(0, size.x - 1);
-    static std::uniform_int_distribution<> distribution_y(0, size.y - 1);
-    for (int i = 0; i < size.x * size.y * wall_percent; i++) {
-        auto x = gen() % size.x;
-        auto y = gen() % size.y;
-        sf::Vector2u pos(x, y);
-        if (pos != start && pos != finish)
-            set_cell(pos, Cell::Wall);
-    }
-}
-
 void Field::set_start(sf::Vector2u start) {
     set_cell(this->start, Cell::Empty);
     this->start = start;

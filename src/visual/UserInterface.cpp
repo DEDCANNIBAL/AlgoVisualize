@@ -27,7 +27,7 @@ void UserInterfaceFSM::init_fsm() {
     fsm[State::Pause][Transition::ClearWallsPressed] = State::None;
     fsm[State::Pause][Transition::ClearPathPressed] = State::None;
 
-    button_for_state[State::None] = {"Start", "Randomize", "Generate maze", "Clear Walls", "Go to Start", "Go to Finish"};
+    button_for_state[State::None] = {"Start", "Randomize", "Generate Maze with Rooms", "Clear Walls", "Go to Start", "Go to Finish"};
     button_for_state[State::PathFinding] = {"Restart", "Pause", "Clear Walls", "Go to Start", "Go to Finish"};
     button_for_state[State::PathFound] = {"Restart", "Clear Path", "Clear Walls",
                                           "Go to Start", "Go to Finish"};

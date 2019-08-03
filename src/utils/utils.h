@@ -3,12 +3,16 @@
 
 #include <experimental/random>
 
-template <class T>
-auto choice(T &contaner){
+
+template<class T>
+auto choice(T &contaner) {
     auto index = std::experimental::randint(0ul, contaner.size() - 1);
-    for(auto element:contaner)
-        if(not index--)
+    for (auto element:contaner)
+        if (not index--)
             return element;
 }
+
+bool roll(float chance);
+
 
 #endif //ALGOVISUALIZE_UTILS_H

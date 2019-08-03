@@ -16,7 +16,8 @@
 #include "visual/FieldInterface.h"
 #include "visual/Camera.h"
 #include "visual/UserInterface.h"
-#include "field_generators/maze_generator.h"
+#include "field_generators/MazeGenerator.h"
+#include "field_generators/RoomMazeGenerator.h"
 
 
 int main() {
@@ -57,9 +58,10 @@ int main() {
         path_finder_manager.start_in_thread();
     });
     user_interface.add_action("Randomize", [&path_finder_manager, &field]() {
-        field.clear_obstacles();
-        path_finder_manager.clear();
-        field.randomize();
+        MazeGenerator(field).generate_maze();
+    });
+    user_interface.add_action("Generate Maze with Rooms", [&field]() {
+        RoomMazeGenerator(field).generate_maze();
     });
     user_interface.add_action("Clear Walls", [&path_finder_manager, &field]() {
         path_finder_manager.finish_search();
@@ -93,9 +95,6 @@ int main() {
         camera.set_center(
                 static_cast<sf::Vector2f>(field.get_finish() * static_cast<uint>(cell_size))
         );
-    });
-    user_interface.add_action("Generate maze", [&field]() {
-        FieldGenerator(field).generate_maze();
     });
 
     while (window.isOpen()) {

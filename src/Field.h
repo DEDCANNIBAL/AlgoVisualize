@@ -51,8 +51,6 @@ public:
 
     void clear_obstacles();
 
-    void randomize();
-
     std::vector<sf::Vector2u> observe_changed_cells();
 };
 
