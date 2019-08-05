@@ -90,6 +90,7 @@ void UserInterface::update(bool is_path_found) {
 
 uint UserInterface::get_transition(bool is_path_found) {
     ImGui::Begin("Control Panel");
+
     uint transition = Transition::NotPressed;
     for (auto &arg: button_for_state[current_state])
         std::visit([&transition, this](auto &&arg) {
@@ -105,6 +106,13 @@ uint UserInterface::get_transition(bool is_path_found) {
                 }
             }
         }, arg);
+
+    if (cells_visited)
+        ImGui::Text("Cells visited: %d", cells_visited);
+
+    if (path_length)
+        ImGui::Text("Path length: %d", path_length);
+
     ImGui::End();
 
     if (is_path_found and current_state == State::PathFinding)
@@ -127,4 +135,12 @@ UserInterface::UserInterface(sf::RenderWindow &window) :
 
 float UserInterface::getDelay() const {
     return delay;
+}
+
+void UserInterface::set_cells_visited(int cellsVisited) {
+    cells_visited = cellsVisited;
+}
+
+void UserInterface::set_path_length(int pathLength) {
+    path_length = pathLength;
 }

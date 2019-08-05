@@ -49,6 +49,7 @@ class UserInterface {
     uint current_state;
     sf::Clock delta_clock;
     float delay;
+    int cells_visited, path_length;
 
     uint get_transition(bool is_path_found);
 
@@ -64,6 +65,10 @@ public:
     void render() { ImGui::SFML::Render(window); }
 
     float getDelay() const;
+
+    void set_cells_visited(int cellsVisited);
+
+    void set_path_length(int pathLength);
 
     bool make_button(std::string &action_name);
 };

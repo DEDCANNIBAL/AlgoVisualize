@@ -23,6 +23,7 @@ class Field {
     std::vector<std::vector<bool>> visited;
     sf::Vector2u start, finish;
     SafeCellsVector changed_cells;
+    int visited_cells;
     void change_cell(sf::Vector2u);
     void change_all_cells();
 
@@ -50,6 +51,8 @@ public:
     void reset_visited();
 
     void clear_obstacles();
+
+    int get_visited_cells() const;
 
     std::vector<sf::Vector2u> observe_changed_cells();
 };

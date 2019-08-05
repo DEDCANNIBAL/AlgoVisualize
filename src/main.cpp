@@ -21,14 +21,13 @@
 
 
 int main() {
-    sf::Vector2u size(500, 500);
+    sf::Vector2u size(1000, 1000);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
 
     PathFinderManager path_finder_manager(field);
     path_finder_manager.set_algorithm<BreadthFirstSearch>();
-    path_finder_manager.set_delay(0.000000001);
 
     sf::Vector2f window_size(1000, 1000);
     auto window_width_in_cells = window_size.x / cell_size - 1;
@@ -113,12 +112,15 @@ int main() {
         auto world_pos = window.mapPixelToCoords(pixel_pos);
         auto mouse_pos = sf::Vector2i(static_cast<int> (world_pos.x), static_cast<int> (world_pos.y));
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
-        user_interface.update(path_finder_manager.is_finished());
-        field_drawer.update();
         if (path_finder_manager.is_finished()) {
             field_drawer.update(path_finder_manager.get_path());
             field_interface.update(cell_pos);
-        }
+            user_interface.set_path_length(path_finder_manager.get_path().size());
+        } else
+            user_interface.set_path_length(0);
+        user_interface.set_cells_visited(field.get_visited_cells());
+        user_interface.update(path_finder_manager.is_finished());
+        field_drawer.update();
 
         camera.setView();
         window.clear(sf::Color::White);
