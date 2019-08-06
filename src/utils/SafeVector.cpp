@@ -25,5 +25,15 @@ std::vector<sf::Vector2u> SafeCellsVector::get_vector() {
 
     cells_mutex.unlock();
 
-    return res;
+    return std::move(res);
+}
+
+std::vector<sf::Vector2u> SafeCellsVector::pop_vector() {
+    cells_mutex.lock();
+
+    auto res = std::move(cells);
+
+    cells_mutex.unlock();
+
+    return std::move(res);
 }

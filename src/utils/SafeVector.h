@@ -14,6 +14,7 @@ public:
     void clear();
     void push_back(sf::Vector2u cell);
     std::vector<sf::Vector2u> get_vector();
+    std::vector<sf::Vector2u> pop_vector();
 };
 
 

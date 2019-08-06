@@ -62,9 +62,8 @@ void Field::set_cell(sf::Vector2u pos, u_int8_t cell) {
 }
 
 std::vector<sf::Vector2u> Field::observe_changed_cells() {
-    std::vector<sf::Vector2u> res = changed_cells.get_vector();
-    changed_cells.clear();
-    return res;
+    std::vector<sf::Vector2u> res = changed_cells.pop_vector();
+    return std::move(res);
 }
 
 void Field::change_cell(sf::Vector2u pos) {
