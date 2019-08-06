@@ -3,7 +3,7 @@
 #include "EllerMazeGenerator.h"
 #include "../utils/utils.h"
 
-const float WALL_PERCENT = 0.5;
+const float WALL_PERCENT = 0.7;
 
 
 void EllerMazeGenerator::prepare() {
@@ -34,10 +34,8 @@ void EllerMazeGenerator::generate_maze() {
 
 void EllerMazeGenerator::next_line() {
     for (uint i = 0; i < size.x; i++) {
-        sf::Vector2u pos = {i, current_line};
-        sf::Vector2u under_pos = {i, current_line + 1};
-        if (field.get_cell(under_pos) == Cell::Wall and
-            field.get_cell(pos) != Cell::Wall)
+        sf::Vector2u pos = {i, current_line + 1};
+        if (field.get_cell(pos) == Cell::Wall)
             set_map[i] = numbers_of_sets++;
     }
     current_line += 2;
