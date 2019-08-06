@@ -130,7 +130,8 @@ bool UserInterface::make_button(std::string &action_name) {
 }
 
 UserInterface::UserInterface(sf::RenderWindow &window) :
-        window(window), current_state(State::None), delay(0) {
+        window(window), current_state(State::None), delay(0),
+        path_length(0){
     init_fsm();
     list_of_algorithms = {"BFS", "A*", "Fast Search", "Experimental Search"};
 }

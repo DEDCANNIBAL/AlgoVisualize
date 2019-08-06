@@ -3,7 +3,7 @@
 #include "EllerMazeGenerator.h"
 #include "../utils/utils.h"
 
-const float WALL_PERCENT = 0.5;
+const float WALL_PERCENT = 0.9;
 
 
 void EllerMazeGenerator::prepare() {
