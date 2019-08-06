@@ -21,5 +21,6 @@ add_executable(AlgoVisualize src/main.cpp lib/imgui/imgui.cpp lib/imgui/imgui_dr
         src/field_generators/MazeGenerator.h src/utils/utils.cpp src/utils/utils.h
         src/path_finders/FastSearch.cpp src/path_finders/FastSearch.h src/path_finders/TestSearch.h
         src/path_finders/TestSearch.cpp src/field_generators/RoomMazeGenerator.cpp
-        src/field_generators/RoomMazeGenerator.h)
+        src/field_generators/RoomMazeGenerator.h src/field_generators/EllerMazeGenerator.cpp
+        src/field_generators/EllerMazeGenerator.h)
 target_link_libraries(AlgoVisualize sfml-graphics sfml-window sfml-system GL pthread)

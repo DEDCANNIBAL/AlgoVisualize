@@ -26,8 +26,7 @@ void MazeGenerator::generate_maze() {
         auto x = gen() % size.x;
         auto y = gen() % size.y;
         sf::Vector2u pos(x, y);
-        if (pos != field.get_start() && pos != field.get_finish())
-            field.set_cell(pos, Cell::Wall);
+        field.set_cell(pos, Cell::Wall);
     }
     field.set_start(field.get_start());
     field.set_finish(field.get_finish());

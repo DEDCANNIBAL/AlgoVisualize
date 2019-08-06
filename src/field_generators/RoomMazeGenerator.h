@@ -40,6 +40,7 @@ class RoomMazeGenerator : public MazeGenerator {
 
 public:
     explicit RoomMazeGenerator(Field &field);
+
     void generate_maze() override;
 
 };

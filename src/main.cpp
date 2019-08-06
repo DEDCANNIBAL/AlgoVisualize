@@ -18,10 +18,11 @@
 #include "visual/UserInterface.h"
 #include "field_generators/MazeGenerator.h"
 #include "field_generators/RoomMazeGenerator.h"
+#include "field_generators/EllerMazeGenerator.h"
 
 
 int main() {
-    sf::Vector2u size(1000, 1000);
+    sf::Vector2u size(500, 500);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
@@ -61,6 +62,9 @@ int main() {
     });
     user_interface.add_action("Generate Maze with Rooms", [&field]() {
         RoomMazeGenerator(field).generate_maze();
+    });
+    user_interface.add_action("Generate Eller Maze", [&field]() {
+        EllerMazeGenerator(field).generate_maze();
     });
     user_interface.add_action("Clear Walls", [&path_finder_manager, &field]() {
         path_finder_manager.finish_search();

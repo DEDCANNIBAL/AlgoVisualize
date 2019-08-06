@@ -30,7 +30,9 @@ void UserInterfaceFSM::init_fsm() {
     fsm[State::Pause][Transition::ClearPathPressed] = State::None;
 
     auto field_generators = std::make_pair("Field Generators"s,
-                                           std::vector{"Randomize"s, "Generate Maze with Rooms"s});
+                                           std::vector{"Randomize"s,
+                                                       "Generate Maze with Rooms"s,
+                                                       "Generate Eller Maze"s});
     auto camera_manipulators = std::make_pair("Camera Manipulators"s,
                                               std::vector{"Go to Start"s, "Go to Finish"s});
     button_for_state[State::None] = {
