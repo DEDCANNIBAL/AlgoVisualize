@@ -52,10 +52,10 @@ class UserInterface {
     int cells_visited, path_length;
 
     uint get_transition(bool is_path_found);
-
+public:
     void algorithms_interface();
 
-public:
+    void delay_slider_interface();
     explicit UserInterface(sf::RenderWindow &window);
 
     void add_action(const std::string &action_name, std::function<void()> action) { actions[action_name] = action; }

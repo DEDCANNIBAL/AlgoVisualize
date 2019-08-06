@@ -79,10 +79,16 @@ void UserInterface::algorithms_interface() {
     ImGui::End();
 }
 
+void UserInterface::delay_slider_interface() {
+    ImGui::Begin("Algorithms");
+    if (ImGui::SliderFloat("Delay", &delay, 0.0f, .01f, "%f", 3)) {
+        actions["Delay"]();
+    }
+    ImGui::End();
+}
+
 void UserInterface::update(bool is_path_found) {
     ImGui::SFML::Update(window, delta_clock.restart());
-    if (is_path_found or current_state == State::None)
-        algorithms_interface();
     auto transition = get_transition(is_path_found);
     auto new_state = fsm[current_state][transition];
     if (new_state == NULL_STATE)

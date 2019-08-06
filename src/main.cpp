@@ -116,16 +116,21 @@ int main() {
         auto world_pos = window.mapPixelToCoords(pixel_pos);
         auto mouse_pos = sf::Vector2i(static_cast<int> (world_pos.x), static_cast<int> (world_pos.y));
         auto cell_pos = field_drawer.mouse_to_cell(mouse_pos);
+        user_interface.update(path_finder_manager.is_finished());
         if (path_finder_manager.is_finished()) {
+            user_interface.algorithms_interface();
+
+            field_interface.update(cell_pos);
+
             auto &path = path_finder_manager.get_path();
             field_drawer.update(path);
-            field_interface.update(cell_pos);
             if (path.size())
                 user_interface.set_path_length(path.size());
-        } else
+        } else{
+            user_interface.delay_slider_interface();
             user_interface.set_path_length(0);
+        }
         user_interface.set_cells_visited(field.get_visited_cells());
-        user_interface.update(path_finder_manager.is_finished());
         field_drawer.update();
 
         camera.setView();
