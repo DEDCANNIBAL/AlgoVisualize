@@ -7,6 +7,8 @@
 class FieldDrawer : public sf::Drawable, public sf::Transformable {
     sf::Vector2u size;
     std::vector<sf::VertexArray> quads;
+    sf::VertexArray vertex_path;
+    size_t path_size;
     sf::VertexArray boards;
     Field &field;
     float cell_size;

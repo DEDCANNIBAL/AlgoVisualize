@@ -8,6 +8,7 @@ void FieldDrawer::draw(sf::RenderTarget &target, sf::RenderStates states) const 
         target.draw(row, states);
     if (cell_size * zoom > 5)
         target.draw(boards, states);
+    target.draw(&vertex_path[0], path_size, sf::LineStrip);
 }
 
 void FieldDrawer::update() {
@@ -16,9 +17,17 @@ void FieldDrawer::update() {
 }
 
 void FieldDrawer::update(const std::vector<sf::Vector2u> &path) {
+    static sf::Vector2f cell_shift(cell_size / 2, cell_size / 2);
+
     for (int i = 1; i + 1 < path.size(); i++)
         if(field.get_cell(path[i]) == Cell::Empty)
             set_color(path[i], sf::Color::Cyan);
+
+    path_size = path.size();
+    for (int i = 0; i < path.size(); i++){
+            vertex_path[i].position = quads[path[i].x][path[i].y*4].position + cell_shift;
+            vertex_path[i].color = sf::Color::Yellow;
+        }
 }
 
 sf::Color FieldDrawer::find_out_color(sf::Vector2u pos) const {
@@ -36,7 +45,8 @@ FieldDrawer::FieldDrawer(Field &field, float cell_size) :
         quads(field.get_size().x, sf::VertexArray(sf::Quads, 4 * size.y)),
         boards(sf::Lines, (size.x + size.y + 2) * 2),
         field(field),
-        cell_size(cell_size) {
+        cell_size(cell_size),
+        vertex_path(sf::LineStrip, field.get_size().x * field.get_size().y){
     initialize_boards();
     initialize_quads();
 }

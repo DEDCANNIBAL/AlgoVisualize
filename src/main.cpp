@@ -22,7 +22,7 @@
 
 
 int main() {
-    sf::Vector2u size(500, 500);
+    sf::Vector2u size(1000, 1000);
     Field field(size);
     auto cell_size = 20;
     FieldDrawer field_drawer(field, cell_size);
@@ -123,9 +123,10 @@ int main() {
             field_interface.update(cell_pos);
 
             auto &path = path_finder_manager.get_path();
-            field_drawer.update(path);
-            if (path.size())
+            if (path.size()) {
+                field_drawer.update(path);
                 user_interface.set_path_length(path.size());
+            }
         } else{
             user_interface.delay_slider_interface();
             user_interface.set_path_length(0);
