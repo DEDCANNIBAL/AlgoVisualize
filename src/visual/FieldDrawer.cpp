@@ -20,14 +20,14 @@ void FieldDrawer::update(const std::vector<sf::Vector2u> &path) {
     static sf::Vector2f cell_shift(cell_size / 2, cell_size / 2);
 
     for (int i = 1; i + 1 < path.size(); i++)
-        if(field.get_cell(path[i]) == Cell::Empty)
+        if (field.get_cell(path[i]) == Cell::Empty)
             set_color(path[i], sf::Color::Cyan);
 
     path_size = path.size();
-    for (int i = 0; i < path.size(); i++){
-            vertex_path[i].position = quads[path[i].x][path[i].y*4].position + cell_shift;
-            vertex_path[i].color = sf::Color::Yellow;
-        }
+    for (int i = 0; i < path.size(); i++) {
+        vertex_path[i].position = quads[path[i].x][path[i].y * 4].position + cell_shift;
+        vertex_path[i].color = sf::Color::Yellow;
+    }
 }
 
 sf::Color FieldDrawer::find_out_color(sf::Vector2u pos) const {
@@ -46,7 +46,7 @@ FieldDrawer::FieldDrawer(Field &field, float cell_size) :
         boards(sf::Lines, (size.x + size.y + 2) * 2),
         field(field),
         cell_size(cell_size),
-        vertex_path(sf::LineStrip, field.get_size().x * field.get_size().y){
+        vertex_path(sf::LineStrip, field.get_size().x * field.get_size().y) {
     initialize_boards();
     initialize_quads();
 }
@@ -75,14 +75,14 @@ void FieldDrawer::initialize_quads() {
         }
 }
 
-void FieldDrawer::set_position(sf::Vector2u pos) {
+void FieldDrawer::set_position(sf::Vector2u pos, float shift) {
     auto &row = quads[pos.x];
-    const static sf::Vector2u shifts[] = {{0, 0},
-                                          {0, 1},
-                                          {1, 1},
-                                          {1, 0}};
+    const sf::Vector2f shifts[] = {{-shift, -shift},
+                                   {-shift, 1 + shift},
+                                   {1 + shift, 1 + shift},
+                                   {1 + shift, -shift}};
     for (int i = 0; i < 4; i++)
-        row[pos.y * 4 + i].position = sf::Vector2f(pos + shifts[i]) * cell_size;
+        row[pos.y * 4 + i].position = (static_cast<sf::Vector2f>(pos) + shifts[i]) * cell_size;
 }
 
 void FieldDrawer::set_color(sf::Vector2u pos, sf::Color col) {
@@ -97,8 +97,8 @@ sf::Vector2u FieldDrawer::mouse_to_cell(sf::Vector2i mouse_pos) {
     mouse_pos.y = std::max(mouse_pos.y, 0);
 
     auto cell_pos = static_cast<sf::Vector2u>(mouse_pos / static_cast<int>(cell_size));
-    cell_pos.x = std::min(cell_pos.x, size.x-1);
-    cell_pos.y = std::min(cell_pos.y, size.y-1);
+    cell_pos.x = std::min(cell_pos.x, size.x - 1);
+    cell_pos.y = std::min(cell_pos.y, size.y - 1);
 
     return cell_pos;
 }

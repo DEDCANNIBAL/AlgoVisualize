@@ -15,7 +15,7 @@ class FieldDrawer : public sf::Drawable, public sf::Transformable {
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
-    void set_position(sf::Vector2u pos);
+    void set_position(sf::Vector2u pos, float shift=0);
 
     void initialize_boards();
 
@@ -24,6 +24,8 @@ class FieldDrawer : public sf::Drawable, public sf::Transformable {
     void initialize_board_pos(uint i, bool is_horizontal);
 
     sf::Color find_out_color(sf::Vector2u pos) const;
+
+    void start_animation(sf::Vector2u pos);
 
 public:
     explicit FieldDrawer(Field &field, float cell_size = 20);
